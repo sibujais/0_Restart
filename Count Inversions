@@ -1,0 +1,108 @@
+//{ Driver Code Starts
+#include <bits/stdc++.h>
+using namespace std;
+
+
+// } Driver Code Ends
+class Solution{
+  public:
+    // arr[]: Input Array
+    // N : Size of the Array arr[]
+    // Function to count inversions in the array.
+    
+    
+    
+    long long merge(long long arr[],long long start,long long mid,long long end){
+        long long n1=mid-start+1;
+        long long n2=end-mid;
+        
+        long long p[n1];
+        long long q[n2];
+        
+        for(int i=0;i<n1;i++){
+            p[i]=arr[start+i];
+        }
+        
+        for(int i=0;i<n2;i++){
+            q[i]=arr[mid+1+i];
+        }
+        
+        long long i=0,j=0,k=start;
+        
+        long long inv=0;
+        
+        while(i<n1 && j<n2){
+            if(p[i] <= q[j]){
+                arr[k]=p[i];
+                k++;
+                i++;
+            }else{
+                arr[k]=q[j];
+                j++;
+                k++;
+                inv+=n1-i;
+            }
+        }
+        
+        while(i<n1){
+            arr[k]=p[i];
+            k++;
+            i++;
+        }
+        
+        while(j<n2){
+            arr[k]=q[j];
+            k++;
+            j++;
+        }
+        
+        return inv;
+    }
+    
+    long long int mergeSort(long long arr[],long long start,long long end){
+        long long mid=start+(end-start)/2;
+        
+        long long int inv=0;
+        
+        if(start<end){
+            inv+=mergeSort(arr,start,mid);
+            inv+=mergeSort(arr,mid+1,end);
+            
+            inv+=merge(arr,start,mid,end);
+        }
+        return inv;
+    }
+    
+    long long int inversionCount(long long arr[], long long N)
+    {
+        // Your Code Here
+        long long int inv=0;
+        inv+=mergeSort(arr,0,N-1);
+        return inv;
+    }
+
+};
+
+//{ Driver Code Starts.
+
+int main() {
+    
+    long long T;
+    cin >> T;
+    
+    while(T--){
+        long long N;
+        cin >> N;
+        
+        long long A[N];
+        for(long long i = 0;i<N;i++){
+            cin >> A[i];
+        }
+        Solution obj;
+        cout << obj.inversionCount(A,N) << endl;
+    }
+    
+    return 0;
+}
+
+// } Driver Code Ends
